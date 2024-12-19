@@ -1,41 +1,60 @@
-# 使用 Ubuntu 作为基础镜像
-FROM dockerp.com/ubuntu:20.04
+# 第一阶段：构建阶段
+FROM dockerp.com/node:20-alpine AS builder
 
-# 设置环境变量
+# 设置环境变量，避免交互式安装
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 使用南京大学的 apt 源并安装常用工具和编译器
-RUN sed -i 's/archive.ubuntu.com/mirrors.nju.edu.cn/g' /etc/apt/sources.list && \
-    apt-get update && apt-get install -y \
+# 使用南京大学的 apk 源并安装构建工具
+RUN sed -i 's|dl-cdn.alpinelinux.org|mirrors.nju.edu.cn|g' /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache \
     curl \
-    wget \
     git \
-    build-essential \
-    software-properties-common \
-    apt-transport-https \
-    gcc g++ make \
-    openjdk-11-jdk \
-    python3 python3-pip \
-    golang \
-    rustc cargo \
-    ruby-full \
-    php composer \
-    ghc cabal-install \
+    build-base \
+    openjdk11 \
+    python3 \
+    py3-pip \
+    go \
+    rust \
+    ruby \
+    php \
+    ghc \
     perl \
     lua5.3 \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+    && rm -rf /var/cache/apk/*
 
-# 安装 Node.js 和 NPM（南京大学源）
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get update && apt-get install -y nodejs && \
-    npm config set registry https://repo.nju.edu.cn/repository/npm/ && \
-    rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+# 设置 npm 镜像源
+RUN npm config set registry https://repo.nju.edu.cn/repository/npm/
 
-# 安装 .NET SDK
-RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    apt-get update && apt-get install -y dotnet-sdk-6.0 && \
-    rm -rf /var/lib/apt/lists/* /var/cache/apt/* packages-microsoft-prod.deb
+# 安装 Node.js 依赖
+WORKDIR /workspace
+COPY . .
+RUN npm install
+
+# 第二阶段：运行阶段（极限小）
+FROM dockerp.com/node:20-alpine
+
+# 设置 npm 镜像源
+RUN npm config set registry https://repo.nju.edu.cn/repository/npm/
+
+# 使用南京大学的 apk 源并安装运行时依赖
+RUN sed -i 's|dl-cdn.alpinelinux.org|mirrors.nju.edu.cn|g' /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache \
+    curl \
+    openjdk11 \
+    python3 \
+    go \
+    rust \
+    ruby \
+    php \
+    ghc \
+    perl \
+    lua5.3 \
+    && rm -rf /var/cache/apk/*
+
+# 从构建阶段复制必要文件
+COPY --from=builder /workspace /workspace
 
 # 设置工作目录
 WORKDIR /workspace
