@@ -14,7 +14,7 @@
       "multi-language",
       "development"
     ],
-    "author": "Your Name",
+    "author": "fly6516",
     "license": "MIT",
     "dependencies": {
       "express": "^4.17.1", 
