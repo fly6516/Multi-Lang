@@ -55,8 +55,8 @@ jobs:
         uses: http://fly6516.synology.me:4000/docker/login-action@v2
         with:
           registry: fly6516.synology.me:8080
-          username: ${{ secrets.GITEA_USERNAME }}
-          password: ${{ secrets.GITEA_PASSWORD }}
+          username: ${{ secrets.DOCKER_SYN_USER }}
+          password: ${{ secrets.DOCKER_SYN_PWD }}
 
       # Build and push the Docker image
       - name: Build and Push Docker Image
