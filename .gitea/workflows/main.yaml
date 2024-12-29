@@ -15,10 +15,11 @@ jobs:
         uses: http://fly6516.synology.me:4000/Gitea_Action/checkout@v2
 
       # Configure Docker to use dockerp.com as a mirror
-      - name: Configure Docker Daemon
+      - name: Configure Docker Daemon for Mirror
         run: |
+          sudo mkdir -p /etc/docker
           echo '{
-            "registry-mirrors": ["https://dockerp.com"]
+             "registry-mirrors": ["https://dockerp.com"]
           }' | sudo tee /etc/docker/daemon.json
           sudo systemctl restart docker
 
