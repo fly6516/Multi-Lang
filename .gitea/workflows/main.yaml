@@ -34,7 +34,9 @@ jobs:
 
       # Validate Docker Configuration
       - name: Validate Docker Configuration
-        run: docker info | grep -i mirrors
+        run: |
+          cat /etc/docker/daemon.json
+          docker info | grep -i "Registry Mirrors"
 
       # Set up Docker Buildx
       - name: Set up Docker Buildx
