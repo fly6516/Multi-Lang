@@ -18,6 +18,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: http://fly6516.synology.me:4000/docker/setup-buildx-action@v2
 
+      # Configure Docker to use dockerp.com as a mirror
+      - name: Configure Docker Daemon
+        run: |
+          echo '{
+            "registry-mirrors": ["https://dockerp.com"]
+          }' | sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker
+
       # Log in to Gitea Docker Registry
       - name: Log in to Gitea Docker Registry
         uses: http://fly6516.synology.me:4000/docker/login-action@v2
