@@ -14,6 +14,11 @@ jobs:
       - name: Checkout repository
         uses: http://fly6516.synology.me:4000/Gitea_Action/checkout@v2
 
+      # pre pull image
+      - name: pre pull image
+        run: |
+          docker pull dockerp.com/moby/buildkit:buildx-stable-1
+
       # Create Docker configuration directory
       - name: Create Docker configuration directory
         run: sudo mkdir -p /etc/docker
