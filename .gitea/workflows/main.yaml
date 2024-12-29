@@ -28,7 +28,7 @@ jobs:
       # Restart Docker Daemon Without systemd
       - name: Restart Docker Daemon
         run: |
-          sudo killall dockerd || true
+          sudo pkill -f dockerd || true
           sudo nohup dockerd > /dev/null 2>&1 &
           sleep 5
 
