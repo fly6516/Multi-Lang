@@ -1,4 +1,4 @@
-name: build-docker-images-for-latest-release-github-ver
+name: build-docker-images-for-multi-latest-release
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
             IMAGE_NAME="dockerp.com/ubuntu:$version"
             TARGET_NAME="fly6516.synology.me:8080/ubuntu:$version"
 
-            # Pull the image from Docker Hub
+            # Pull the image from Docker Hub if not already exists locally
             if ! docker image inspect "$IMAGE_NAME" > /dev/null 2>&1; then
               echo "Pulling $IMAGE_NAME from Docker Hub..."
               docker pull "$IMAGE_NAME"
@@ -35,17 +35,17 @@ jobs:
             docker push "$TARGET_NAME"
           done
 
-        # Pre-pull QEMU and Buildx images
+      # Pre-pull QEMU and Buildx images
       - name: Pre-pull QEMU and Buildx Images
         run: |
           # Define the images to pull
           QEMU_IMAGE="dockerp.com/multiarch/qemu-user-static:latest"
-          BUILDX_IMAGE="dockerp.com/moby/buildkit:buildx-stable-1"
+          BUILDX_IMAGE="dockerp.com/buildkit:buildx-stable-1"
 
           # Check and pull multiarch/qemu-user-static if not exists
           if ! docker image inspect "$QEMU_IMAGE" > /dev/null 2>&1; then
-          echo "Pulling $QEMU_IMAGE..."
-          docker pull "$QEMU_IMAGE"
+            echo "Pulling $QEMU_IMAGE..."
+            docker pull "$QEMU_IMAGE"
           else
             echo "$QEMU_IMAGE already exists locally."
           fi
@@ -58,13 +58,14 @@ jobs:
             echo "$BUILDX_IMAGE already exists locally."
           fi
 
-
-        # Set up Docker Buildx and QEMU for multi-platform builds
+      # Set up Docker Buildx and QEMU for multi-platform builds
       - name: Set up Docker Buildx and QEMU
         uses: http://fly6516.synology.me:4000/docker/setup-buildx-action@v2
+
+      # Enable QEMU for multi-platform support
       - name: Enable QEMU for multi-platform support
         run: |
-          docker run --rm --privileged dockerp.com/multiarch/qemu-user-static --reset -p yes
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
       # Log in to Gitea Docker Registry
       - name: Log in to Gitea Docker Registry
@@ -74,6 +75,7 @@ jobs:
           username: ${{ secrets.DOCKER_SYN_USER }}
           password: ${{ secrets.DOCKER_SYN_PWD }}
 
+      # Set Docker Timeout
       - name: Set Docker Timeout
         run: |
           echo "DOCKER_CLIENT_TIMEOUT=300" >> $GITHUB_ENV
