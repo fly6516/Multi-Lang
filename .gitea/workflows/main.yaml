@@ -78,7 +78,7 @@ jobs:
         uses: http://fly6516.synology.me:4000/docker/build-push-action@v4
         with:
           push: true
-          tags: https://fly6516.synology.me:8080/multilang:latest
+          tags: fly6516.synology.me:8080/multilang:latest
           context: auto build for multilang latest
 
       # Optional: Verify the pushed image
