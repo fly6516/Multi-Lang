@@ -1,0 +1,68 @@
+name: build-docker-images-for-latest-release-github-ver
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: http://fly6516.synology.me:4000/Gitea_Action/checkout@v2
+
+      # Pre-pull Ubuntu images and push to private registry
+      - name: Pre-pull and Push Ubuntu Images
+        run: |
+          UBUNTU_VERSIONS=("18.04" "20.04" "22.04")
+          for version in "${UBUNTU_VERSIONS[@]}"; do
+            IMAGE_NAME="ubuntu:$version"
+            TARGET_NAME="fly6516.synology.me:8080/ubuntu:$version"
+
+            # Pull the image from Docker Hub
+            if ! docker image inspect "$IMAGE_NAME" > /dev/null 2>&1; then
+              echo "Pulling $IMAGE_NAME from Docker Hub..."
+              docker pull "$IMAGE_NAME"
+            else
+              echo "$IMAGE_NAME already exists locally."
+            fi
+
+            # Tag and push to the private registry
+            docker tag "$IMAGE_NAME" "$TARGET_NAME"
+            docker push "$TARGET_NAME"
+          done
+
+      # Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: http://fly6516.synology.me:4000/docker/setup-buildx-action@v2
+
+      # Log in to Gitea Docker Registry
+      - name: Log in to Gitea Docker Registry
+        uses: http://fly6516.synology.me:4000/docker/login-action@v2
+        with:
+          registry: https://fly6516.synology.me:8080
+          username: ${{ secrets.DOCKER_SYN_USER }}
+          password: ${{ secrets.DOCKER_SYN_PWD }}
+
+      - name: Set Docker Timeout
+        run: |
+          echo "DOCKER_CLIENT_TIMEOUT=300" >> $GITHUB_ENV
+          echo "DOCKER_BUILD_TIMEOUT=300" >> $GITHUB_ENV
+
+      # Build and push the Docker image for all platforms
+      - name: Build and Push Multi-Platform Docker Image
+        uses: http://fly6516.synology.me:4000/docker/build-push-action@v4
+        with:
+          push: true
+          tags: fly6516.synology.me:8080/multilang:latest
+          context: .
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+
+      # Optional: Verify the pushed image
+      - name: Verify Docker Image
+        run: |
+          docker pull fly6516.synology.me:8080/multilang:latest
+          docker run --rm fly6516.synology.me:8080/multilang:latest bash -c "echo 'Image verified'"
