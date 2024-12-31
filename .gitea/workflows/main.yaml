@@ -79,7 +79,7 @@ jobs:
         with:
           push: true
           tags: fly6516.synology.me:8080/multilang:latest
-          context: auto build for multilang latest
+          context: .
 
       # Optional: Verify the pushed image
       - name: Verify Docker Image
