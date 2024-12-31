@@ -40,7 +40,7 @@ jobs:
         run: |
           # Define the images to pull
           QEMU_IMAGE="dockerp.com/multiarch/qemu-user-static:latest"
-          BUILDX_IMAGE="dockerp.com/buildkit:buildx-stable-1"
+          BUILDX_IMAGE="dockerp.com/moby/buildkit:buildx-stable-1"
 
           # Check and pull multiarch/qemu-user-static if not exists
           if ! docker image inspect "$QEMU_IMAGE" > /dev/null 2>&1; then
