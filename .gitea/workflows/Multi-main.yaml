@@ -1,4 +1,4 @@
-name: build-docker-images-for-multi-latest-release
+name: build-docker-images-for-latest-release-github-ver
 
 on:
   push:
@@ -58,14 +58,9 @@ jobs:
             echo "$BUILDX_IMAGE already exists locally."
           fi
 
-      # Set up Docker Buildx and QEMU for multi-platform builds
-      - name: Set up Docker Buildx and QEMU
+      # Set up Docker Buildx
+      - name: Set up Docker Buildx
         uses: http://fly6516.synology.me:4000/docker/setup-buildx-action@v2
-
-      # Enable QEMU for multi-platform support
-      - name: Enable QEMU for multi-platform support
-        run: |
-          docker run --rm --privileged dockerp.com/multiarch/qemu-user-static --reset -p yes
 
       # Log in to Gitea Docker Registry
       - name: Log in to Gitea Docker Registry
