@@ -3,7 +3,8 @@
 # ENTRYPOINT ["top", "-b"]
 
 # 使用 Ubuntu 作为基础镜像
-FROM dockerp.com/ubuntu:20.04
+#FROM dockerp.com/ubuntu:20.04
+FROM ubuntu:20.04
 
 # 设置环境变量
 ENV DEBIAN_FRONTEND=noninteractive
