@@ -38,28 +38,28 @@ jobs:
       - name: Create Docker configuration directory
         run: sudo mkdir -p /etc/docker
 
-      # Configure Docker to use dockerp.com as a mirror
-      - name: Configure Docker Daemon for Mirror
-        run: |
-          echo '{
-            "registry-mirrors": ["https://dockerp.com"]
-          }' | sudo tee /etc/docker/daemon.json
-
-      # Restart Docker Daemon Without systemd
-      - name: Restart Docker Daemon
-        run: |
-          sudo chmod 644 /etc/docker/daemon.json
-          sudo pkill -f dockerd || true
-          sudo pkill -f docker || true
-          sudo nohup dockerd > /dev/null 2>&1 &
-          sudo nohup docker > /dev/null 2>&1 &
-          sleep 5
-
-      # Validate Docker Configuration
-      - name: Validate Docker Configuration
-        run: |
-          cat /etc/docker/daemon.json
-          docker info | grep -i "Registry Mirrors"
+#      # Configure Docker to use dockerp.com as a mirror
+#      - name: Configure Docker Daemon for Mirror
+#        run: |
+#          echo '{
+#            "registry-mirrors": ["https://dockerp.com"]
+#          }' | sudo tee /etc/docker/daemon.json
+#
+#      # Restart Docker Daemon Without systemd
+#      - name: Restart Docker Daemon
+#        run: |
+#          sudo chmod 644 /etc/docker/daemon.json
+#          sudo pkill -f dockerd || true
+#          sudo pkill -f docker || true
+#          sudo nohup dockerd > /dev/null 2>&1 &
+#          sudo nohup docker > /dev/null 2>&1 &
+#          sleep 5
+#
+#      # Validate Docker Configuration
+#      - name: Validate Docker Configuration
+#        run: |
+#          cat /etc/docker/daemon.json
+#          docker info | grep -i "Registry Mirrors"
 
       # Set up Docker Buildx
       - name: Set up Docker Buildx
@@ -72,6 +72,11 @@ jobs:
           registry: https://fly6516.synology.me:8080
           username: ${{ secrets.DOCKER_SYN_USER }}
           password: ${{ secrets.DOCKER_SYN_PWD }}
+
+      - name: Set Docker Timeout
+        run: |
+          echo "DOCKER_CLIENT_TIMEOUT=300" >> $GITHUB_ENV
+          echo "DOCKER_BUILD_TIMEOUT=300" >> $GITHUB_ENV
 
       # Build and push the Docker image
       - name: Build and Push Docker Image
