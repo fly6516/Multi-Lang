@@ -19,7 +19,7 @@ jobs:
         run: |
           UBUNTU_VERSIONS=("18.04" "20.04" "22.04")
           for version in "${UBUNTU_VERSIONS[@]}"; do
-            IMAGE_NAME="ubuntu:$version"
+            IMAGE_NAME="dockerp.com/ubuntu:$version"
             TARGET_NAME="fly6516.synology.me:8080/ubuntu:$version"
 
             # Pull the image from Docker Hub
