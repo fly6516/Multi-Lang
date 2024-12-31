@@ -1,4 +1,4 @@
-name: build-docker-images-for-latest-release
+name: build-docker-images-for-latest-release-github-ver
 
 on:
   push:
