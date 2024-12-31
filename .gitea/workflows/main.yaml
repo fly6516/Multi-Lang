@@ -24,9 +24,15 @@ jobs:
         uses: http://fly6516.synology.me:4000/Gitea_Action/checkout@v2
 
       # pre pull image
-      - name: pre pull image
+      - name: Pre Pull Image if Needed
         run: |
-          docker pull dockerp.com/moby/buildkit:buildx-stable-1
+            IMAGE_NAME="dockerp.com/moby/buildkit:buildx-stable-1"
+            if ! docker image inspect "$IMAGE_NAME" > /dev/null 2>&1; then
+              echo "Image does not exist locally. Pulling..."
+              docker pull "$IMAGE_NAME"
+            else
+              echo "Image already exists locally."
+            fi
 
       # Create Docker configuration directory
       - name: Create Docker configuration directory
