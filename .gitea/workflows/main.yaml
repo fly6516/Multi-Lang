@@ -25,12 +25,6 @@ jobs:
 #            echo "Image already exists locally."
 #          fi
 
-      # Set up Docker Buildx
-      - name: Set up Docker Buildx
-        run: |
-          docker buildx create --use --name mybuilder
-          docker buildx inspect --bootstrap
-
       # Log in to Gitea Docker Registry
       - name: Log in to Gitea Docker Registry
         run: |
@@ -42,13 +36,15 @@ jobs:
           echo "DOCKER_CLIENT_TIMEOUT=300" >> $GITHUB_ENV
           echo "DOCKER_BUILD_TIMEOUT=300" >> $GITHUB_ENV
 
-      # Build the Docker image for all architectures
-      - name: Build Multi-Arch Docker Image
+      # Build the Docker image
+      - name: Build Docker Image
         run: |
-          docker buildx build \
-            --platform linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le,linux/s390x,linux/386 \
-            -t fly6516.synology.me:8080/multilang:latest \
-            . --push
+          docker build -t fly6516.synology.me:8080/multilang:latest .
+
+      # Push the Docker image
+      - name: Push Docker Image
+        run: |
+          docker push fly6516.synology.me:8080/multilang:latest
 
       # Optional: Verify the pushed image
       - name: Verify Docker Image
