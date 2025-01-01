@@ -10,7 +10,9 @@ FROM fly6516.synology.me:8080/ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 # 使用南京大学的 apt 源
-RUN sed -i 's/archive.ubuntu.com/mirrors.nju.edu.cn/g' /etc/apt/sources.list
+RUN if [ "$(uname -m)" = "x86_64" ]; then \
+    sed -i 's/archive.ubuntu.com/mirrors.nju.edu.cn/g' /etc/apt/sources.list; \
+    fi
 
 # 更新系统并安装常用工具
 RUN apt-get update && apt-get install -y \

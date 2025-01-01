@@ -83,7 +83,7 @@ jobs:
           push: true
           tags: fly6516.synology.me:8080/multilang:latest
           context: .
-          platforms: linux/amd64,linux/arm64  #,linux/arm/v7
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
 
       # Optional: Verify the pushed image
       - name: Verify Docker Image
