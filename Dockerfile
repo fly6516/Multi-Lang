@@ -9,6 +9,11 @@ FROM fly6516.synology.me:8080/ubuntu:20.04
 # 设置环境变量
 ENV DEBIAN_FRONTEND=noninteractive
 
+# 安装 QEMU 模拟器，支持多架构构建
+RUN apt-get update && apt-get install -y \
+    qemu-user-static \
+    && rm -rf /var/lib/apt/lists/*
+
 # 使用南京大学的 apt 源
 # RUN sed -i 's/archive.ubuntu.com/mirrors.nju.edu.cn/g' /etc/apt/sources.list
 

@@ -1,4 +1,4 @@
-name: build-docker-images-for-latest-release-github-ver
+name: build-docker-images-for-multi-latest-release
 
 on:
   push:
@@ -76,13 +76,14 @@ jobs:
           echo "DOCKER_CLIENT_TIMEOUT=300" >> $GITHUB_ENV
           echo "DOCKER_BUILD_TIMEOUT=300" >> $GITHUB_ENV
 
-      # Build and push the Docker image for all platforms
+      # Build and push the Docker image for all platforms (including multi-architecture support)
       - name: Build and Push Multi-Platform Docker Image
         uses: http://fly6516.synology.me:4000/docker/build-push-action@v4
         with:
           push: true
           tags: fly6516.synology.me:8080/multilang:latest
           context: .
+          file: ./Dockerfile  # Ensure this points to the correct Dockerfile location
           platforms: linux/amd64,linux/arm64,linux/arm/v7
 
       # Optional: Verify the pushed image
