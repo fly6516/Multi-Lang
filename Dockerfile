@@ -15,7 +15,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 #    && rm -rf /var/lib/apt/lists/*
 
 # 使用南京大学的 apt 源
-# RUN sed -i 's/archive.ubuntu.com/mirrors.nju.edu.cn/g' /etc/apt/sources.list
+RUN sed -i 's/archive.ubuntu.com/mirrors.nju.edu.cn/g' /etc/apt/sources.list
 
 # 更新系统并安装常用工具
 RUN apt-get update && apt-get install -y \
