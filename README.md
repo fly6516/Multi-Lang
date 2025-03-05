@@ -1,5 +1,5 @@
 
-# Multi-Lang / 多语言项目
+# Multi-Language Compile Environment / 多语言编译环境
 
 [English Version](#english-version) | [中文版本](#中文版本)
 
@@ -9,34 +9,26 @@
 <a id="english-version"></a>
 
 ### Overview
-Multi-Lang is a Docker multi-architecture build project that demonstrates how to build and push Docker images for various platforms. This project leverages Docker Buildx and QEMU for cross-platform builds.
+This project provides a Docker-based multi-language compile environment. It is designed to support development in various programming languages such as C/C++, Java, Python, Node.js, Go, Rust, Ruby, PHP, Haskell, Perl, Lua, and .NET.
 
 ### Prerequisites
-- Docker (with Buildx support)
-- QEMU for multi-architecture emulation
+- Docker (with Buildx support if needed)
+- Internet access to download dependencies
 
 ### Build Instructions
-
-1. **Create and Enable Buildx Builder**  
-   Create a new Buildx builder instance and switch to it:
+1. **Build the Docker image:**  
+   Execute the following command in the project directory:
    ```bash
-   docker buildx create --use
+   docker build -t multi-lang .
    ```
-
-2. **Start QEMU Multi-Architecture Emulator**  
-   Run the following command to start QEMU with multi-arch support:
+2. **Run the container:**  
+   Start a container with:
    ```bash
-   docker run --rm --privileged fly6516.synology.me:8080/multiarch/qemu-user-static --reset -p yes
-   ```
-
-3. **Build and Push Multi-Arch Docker Image**  
-   Build your Docker image for multiple architectures and push it to the registry:
-   ```bash
-   docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/ppc64le,linux/s390x,linux/mips64le -t fly6516.synology.me:8080/multilang:latest . --push
+   docker run -it --rm multi-lang
    ```
 
 ### Usage
-After pushing the image, you can deploy it on the supported platforms using your preferred orchestration tools.
+Once inside the container, you can use the pre-installed compilers and tools to compile and run your projects. The working directory is set to `/workspace`.
 
 ---
 
@@ -48,34 +40,26 @@ After pushing the image, you can deploy it on the supported platforms using your
 <a id="中文版本"></a>
 
 ### 概述
-Multi-Lang 是一个 Docker 多架构构建项目，展示了如何利用 Docker Buildx 与 QEMU 构建并推送支持多种平台的 Docker 镜像。
+该项目构建了一个基于 Docker 的多语言编译环境，支持 C/C++、Java、Python、Node.js、Go、Rust、Ruby、PHP、Haskell、Perl、Lua 以及 .NET 等多种语言的开发和编译。
 
 ### 前提条件
-- 安装支持 Buildx 的 Docker
-- 配置 QEMU 以支持多架构模拟
+- 安装 Docker（如果需要可支持 Buildx）
+- 具备下载依赖的网络环境
 
-### 编译步骤
-
-1. **创建并启用 Buildx 构建器**  
-   创建一个新的 Buildx 构建器实例并切换到该实例：
+### 构建步骤
+1. **构建 Docker 镜像：**  
+   在项目目录下执行：
    ```bash
-   docker buildx create --use
+   docker build -t multi-lang .
    ```
-
-2. **启动 QEMU 多架构模拟器**  
-   执行以下命令以启动 QEMU 多架构支持：
+2. **运行容器：**  
+   使用以下命令启动容器：
    ```bash
-   docker run --rm --privileged fly6516.synology.me:8080/multiarch/qemu-user-static --reset -p yes
-   ```
-
-3. **构建并推送多架构 Docker 镜像**  
-   针对多个平台构建 Docker 镜像，并将其推送到镜像仓库：
-   ```bash
-   docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/ppc64le,linux/s390x,linux/mips64le -t fly6516.synology.me:8080/multilang:latest . --push
+   docker run -it --rm multi-lang
    ```
 
 ### 使用方法
-镜像推送成功后，您可以使用您偏好的编排工具在各个平台上进行部署。
+进入容器后，所有的编译器与工具已经预先安装好，工作目录为 `/workspace`，可以直接在此目录下进行项目的开发和编译。
 
 ---
 
