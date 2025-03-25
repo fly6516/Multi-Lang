@@ -8,6 +8,8 @@
 ## English Version
 <a id="english-version"></a>
 
+> ❗️ **Warning** > The `slim` and `max` versions and their branches have been temporarily put on hold due to optimizations in the `latest` image (main branch). They may contain bugs and are not recommended for compiling or running images.
+
 ### Overview
 This project provides a Docker-based multi-language compile environment. It is designed to support development in various programming languages such as C/C++, Java, Python, Node.js, Go, Rust, Ruby, PHP, Haskell, Perl, Lua, and .NET.  
 **[Docker Hub](https://hub.docker.com/r/fly6516/multilang)**  
@@ -44,6 +46,8 @@ Once inside the container, you can use the pre-installed compilers and tools to 
 
 ## 中文版本
 <a id="中文版本"></a>
+
+> ❗️ **警告** > 由于 latest 镜像（即 main 分支）的优化，slim 和 max 版本及其分支已被暂时搁置，可能存在 Bug，不建议进行编译或运行镜像。
 
 ### 概述
 该项目构建了一个基于 Docker 的多语言编译环境，支持 C/C++、Java、Python、Node.js、Go、Rust、Ruby、PHP、Haskell、Perl、Lua 以及 .NET 等多种语言的开发和编译。
