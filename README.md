@@ -9,7 +9,13 @@
 <a id="english-version"></a>
 
 ### Overview
-This project provides a Docker-based multi-language compile environment. It is designed to support development in various programming languages such as C/C++, Java, Python, Node.js, Go, Rust, Ruby, PHP, Haskell, Perl, Lua, and .NET.
+This project provides a Docker-based multi-language compile environment. It is designed to support development in various programming languages such as C/C++, Java, Python, Node.js, Go, Rust, Ruby, PHP, Haskell, Perl, Lua, and .NET.  
+**[Docker Hub](https://hub.docker.com/r/fly6516/multilang)**  
+- you can just use the prebuild images at multi-platform
+- ```bash
+   docker pull fly6516/multilang
+   ```
+- you can use the pre-installed compilers and tools to compile and run your projects. The working directory is set to `/workspace`.
 
 ### Prerequisites
 - Docker (with Buildx support if needed)
@@ -28,7 +34,7 @@ This project provides a Docker-based multi-language compile environment. It is d
    ```
 
 ### Usage
-Once inside the container, you can use the pre-installed compilers and tools to compile and run your projects. The working directory is set to `/workspace`.
+Once inside the container, you can use the pre-installed compilers and tools to compile and run your projects. The working directory is set to `/workspace`.  
 
 ---
 
@@ -41,6 +47,12 @@ Once inside the container, you can use the pre-installed compilers and tools to 
 
 ### 概述
 该项目构建了一个基于 Docker 的多语言编译环境，支持 C/C++、Java、Python、Node.js、Go、Rust、Ruby、PHP、Haskell、Perl、Lua 以及 .NET 等多种语言的开发和编译。
+**[Docker Hub](https://hub.docker.com/r/fly6516/multilang)**
+- 您可以在多平台下使用预构建的镜像。
+- ```bash
+   docker pull fly6516/multilang
+   ```
+- 您可以使用预先安装的编译器和工具来编译和运行您的项目。工作目录设置为 `/workspace`。
 
 ### 前提条件
 - 安装 Docker（如果需要可支持 Buildx）
