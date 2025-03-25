@@ -38,6 +38,23 @@ This project provides a Docker-based multi-language compile environment. It is d
 ### Usage
 Once inside the container, you can use the pre-installed compilers and tools to compile and run your projects. The working directory is set to `/workspace`.  
 
+### Building
+
+#### create and enable Buildx builder
+```bash
+docker buildx create --use
+```
+
+#### run QEMU to emulate multiplatform
+```bash
+docker run --rm --privileged fly6516.synology.me:8080/multiarch/qemu-user-static --reset -p yes
+```
+
+#### build and push docker image
+```bash
+docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/ppc64le,linux/s390x,linux/mips64le -t fly6516/multilang:latest . --push
+```
+
 ---
 
 [中文版本](#中文版本)
