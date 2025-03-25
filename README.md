@@ -73,7 +73,24 @@ Once inside the container, you can use the pre-installed compilers and tools to 
 ### 使用方法
 进入容器后，所有的编译器与工具已经预先安装好，工作目录为 `/workspace`，可以直接在此目录下进行项目的开发和编译。
 
+
+### 编译
+
+#### 创建并启用 Buildx 构建器
+```bash
+docker buildx create --use
+```
+
+#### 启动 QEMU 支持的多架构模拟器
+```bash
+docker run --rm --privileged fly6516.synology.me:8080/multiarch/qemu-user-static --reset -p yes
+```
+
+#### 构建并推送多架构 Docker 镜像
+```bash
+docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/ppc64le,linux/s390x,linux/mips64le -t fly6516/multilang:latest . --push
+```
+
 ---
 
 [English Version](#english-version)
-```
